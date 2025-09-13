@@ -21,6 +21,6 @@
       "~/*": ["./app/*"]
     },
     "noEmit": true,
-    "types": ["@remix-run/node", "vite/client", "@types/react", "@types/react-dom"]
+    "types": ["@remix-run/node", "vite/client"]
   }
 }
