@@ -1,4 +1,7 @@
 import {
+  require_node
+} from "/build/_shared/chunk-G7CHZRZX.js";
+import {
   createHotContext
 } from "/build/_shared/chunk-IYO5FDN4.js";
 import "/build/_shared/chunk-UWV35TSL.js";
@@ -7,16 +10,8 @@ import {
 } from "/build/_shared/chunk-XGOTYLZ5.js";
 import "/build/_shared/chunk-7M6SC7J5.js";
 import {
-  __commonJS,
   __toESM
 } from "/build/_shared/chunk-PNG5AS42.js";
-
-// empty-module:@remix-run/node
-var require_node = __commonJS({
-  "empty-module:@remix-run/node"(exports, module) {
-    module.exports = {};
-  }
-});
 
 // app/routes/_index.tsx
 var import_node = __toESM(require_node(), 1);
@@ -471,4 +466,4 @@ export {
   Index as default,
   meta
 };
-//# sourceMappingURL=/build/routes/_index-SVWEMRWY.js.map
+//# sourceMappingURL=/build/routes/_index-B76OHK7M.js.map

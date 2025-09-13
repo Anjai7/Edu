@@ -5,29 +5,25 @@ import {
   init_browser
 } from "/build/_shared/chunk-PH7FC7E6.js";
 import {
+  require_node
+} from "/build/_shared/chunk-G7CHZRZX.js";
+import {
   useLoaderData
-} from "/build/_shared/chunk-5OSK6WXY.js";
+} from "/build/_shared/chunk-PTZFFYVS.js";
 import "/build/_shared/chunk-U4FRFQSK.js";
+import {
+  createHotContext
+} from "/build/_shared/chunk-IYO5FDN4.js";
+import "/build/_shared/chunk-UWV35TSL.js";
 import {
   require_jsx_dev_runtime
 } from "/build/_shared/chunk-XGOTYLZ5.js";
 import "/build/_shared/chunk-7M6SC7J5.js";
 import {
-  createHotContext
-} from "/build/_shared/chunk-V7SAXF47.js";
-import "/build/_shared/chunk-UWV35TSL.js";
-import {
   __commonJS,
   __toCommonJS,
   __toESM
 } from "/build/_shared/chunk-PNG5AS42.js";
-
-// empty-module:@remix-run/node
-var require_node = __commonJS({
-  "empty-module:@remix-run/node"(exports, module) {
-    module.exports = {};
-  }
-});
 
 // node_modules/@supabase/postgrest-js/dist/cjs/PostgrestError.js
 var require_PostgrestError = __commonJS({
@@ -7871,7 +7867,7 @@ if (import.meta) {
     //@ts-expect-error
     "app\\routes\\leaderboard.tsx"
   );
-  import.meta.hot.lastModified = "1757746370077.1003";
+  import.meta.hot.lastModified = "1757748982551.0398";
 }
 var supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
 var meta = () => {
@@ -8341,4 +8337,4 @@ export {
   Leaderboard as default,
   meta
 };
-//# sourceMappingURL=/build/routes/leaderboard-SJORY7V5.js.map
+//# sourceMappingURL=/build/routes/leaderboard-VPHQL6XK.js.map
