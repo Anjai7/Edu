@@ -16,6 +16,7 @@ import {
 export function Navigation() {
   const navigation = [
     { name: 'Dashboard', href: '/', icon: HomeIcon },
+    { name: 'Student Dashboard', href: '/student-dashboard', icon: AcademicCapIcon },
     { name: 'Study Buddy', href: '/study', icon: BookOpenIcon },
     { name: 'Notes', href: '/notes', icon: AcademicCapIcon },
     { name: 'Calendar', href: '/calendar', icon: CalendarIcon },
