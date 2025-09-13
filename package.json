@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "remix build",
-    "dev": "remix dev --manual",
+    "dev": "remix dev --manual --port 4000",
     "start": "remix-serve ./build/index.js",
     "typecheck": "tsc"
   },
