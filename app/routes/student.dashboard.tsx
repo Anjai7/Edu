@@ -87,7 +87,7 @@ export default function StudentDashboard() {
       title: "Leaderboard",
       description: "See your class rankings",
       icon: TrophyIcon,
-      href: "/leaderboard",
+      href: "/student/leaderboard",
       stats: "Rank #5",
       color: "from-yellow-600 to-yellow-700",
     },
