@@ -12,7 +12,6 @@ import {
   XMarkIcon,
   Bars3Icon,
   HomeIcon,
-  UserGroupIcon,
   BookOpenIcon,
   DocumentTextIcon,
   BellIcon,
@@ -151,8 +150,9 @@ export default function StudentLeaderboard() {
     { name: 'Dashboard', href: '/student/dashboard', icon: HomeIcon, current: false },
     { name: 'Assignments', href: '/student/assignments', icon: DocumentTextIcon, current: false },
     { name: 'Attendance', href: '/student/attendance', icon: CalendarDaysIcon, current: false },
-    { name: 'Grades', href: '/student/grades', icon: ChartBarIcon, current: false },
+    { name: 'Performance', href: '/student/academic-performance', icon: ChartBarIcon, current: false },
     { name: 'Leaderboard', href: '/student/leaderboard', icon: TrophyIcon, current: true },
+    { name: 'Notes', href: '/student/notes', icon: BookOpenIcon, current: false },
     { name: 'Announcements', href: '/student/announcements', icon: BellIcon, current: false },
     { name: 'Profile', href: '/student/profile', icon: CogIcon, current: false },
   ];
