@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
-
+import { redirect } from "@remix-run/node";
+import { useState, useEffect } from "react";
 
 export const meta: MetaFunction = () => {
   return [

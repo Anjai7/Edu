@@ -1,6 +1,360 @@
-import type { MetaFunction } from "@remix-run/node";
-
+import type { MetaFunction, LoaderFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { Link } from "@remix-run/react";
+import { StudentNavigation } from "../components/StudentNavigation";
+import {
+  AcademicCapIcon,
+  BellIcon,
+  BookOpenIcon,
+  CalendarDaysIcon,
+  ChartBarIcon,
+  CheckCircleIcon,
+  ClockIcon,
+  DocumentTextIcon,
+  ExclamationCircleIcon,
+  PaperAirplaneIcon,
+  ShoppingBagIcon,
+  SpeakerWaveIcon,
+  TrophyIcon,
+  UserGroupIcon,
+} from "@heroicons/react/24/outline";
 
 export const meta: MetaFunction = () => {
   return [
     { title: "Student Dashboard - EduHub" },
+    { name: "description", content: "Your comprehensive student dashboard for academic success" },
+  ];
+};
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  return json({
+    success: true
+  });
+}
+
+const mockTasks = [
+  {
+    id: 1,
+    title: "Math Assignment - Chapter 5",
+    type: "assignment",
+    dueDate: "2025-09-15",
+    status: "pending",
+  },
+  {
+    id: 2,
+    title: "History Essay",
+    type: "homework",
+    dueDate: "2025-09-18",
+    status: "in-progress",
+  },
+  {
+    id: 3,
+    title: "Physics Lab Report",
+    type: "assignment",
+    dueDate: "2025-09-20",
+    status: "completed",
+  },
+];
+
+const mockAnnouncements = [
+  {
+    id: 1,
+    title: "Sports Day Postponed",
+    date: "2025-09-13",
+    type: "event",
+  },
+  {
+    id: 2,
+    title: "Mid-term Results Published",
+    date: "2025-09-12",
+    type: "academic",
+  },
+  {
+    id: 3,
+    title: "Library Maintenance",
+    date: "2025-09-11",
+    type: "facility",
+  },
+];
+
+export default function StudentDashboard() {
+  const dashboardItems = [
+    {
+      title: "Assignments",
+      description: "Track and manage your assignments",
+      icon: DocumentTextIcon,
+      href: "/student/assignments",
+      stats: "8 pending",
+      color: "from-slate-600 to-slate-700",
+    },
+    {
+      title: "Records",
+      description: "View your academic records",
+      icon: AcademicCapIcon,
+      href: "/student/records",
+      stats: "GPA: 3.8",
+      color: "from-slate-600 to-slate-700",
+    },
+    {
+      title: "Homework",
+      description: "Daily homework and tasks",
+      icon: BookOpenIcon,
+      href: "/student/homework",
+      stats: "5 due today",
+      color: "from-slate-600 to-slate-700",
+    },
+    {
+      title: "Exam Timetable",
+      description: "Upcoming examinations",
+      icon: CalendarDaysIcon,
+      href: "/student/exam-timetable",
+      stats: "3 this week",
+      color: "from-slate-600 to-slate-700",
+    },
+    {
+      title: "Events",
+      description: "School events and activities",
+      icon: UserGroupIcon,
+      href: "/student/events",
+      stats: "2 upcoming",
+      color: "from-slate-600 to-slate-700",
+    },
+    {
+      title: "Leaderboard",
+      description: "Rankings and achievements",
+      icon: ChartBarIcon,
+      href: "/leaderboard",
+      stats: "Rank #12",
+      color: "from-slate-600 to-slate-700",
+    },
+    {
+      title: "Canteen Stock",
+      description: "Available canteen items",
+      icon: ShoppingBagIcon,
+      href: "/student/canteen",
+      stats: "25 items",
+      color: "from-slate-600 to-slate-700",
+    },
+    {
+      title: "Announcements",
+      description: "Important notifications",
+      icon: SpeakerWaveIcon,
+      href: "/student/announcements",
+      stats: "3 new",
+      color: "from-slate-600 to-slate-700",
+    },
+  ];
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "completed":
+        return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
+      case "in-progress":
+        return <ClockIcon className="h-5 w-5 text-yellow-500" />;
+      default:
+        return <ExclamationCircleIcon className="h-5 w-5 text-red-500" />;
+    }
+  };
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case "completed":
+        return "Completed";
+      case "in-progress":
+        return "In Progress";
+      default:
+        return "Pending";
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      <StudentNavigation />
+      
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+        {/* Hero Section */}
+        <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+          <div className="bg-gradient-to-r from-blue-900 to-slate-800 rounded-xl sm:rounded-2xl p-6 sm:p-8 lg:p-12 text-white shadow-2xl">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-4">
+              Student Portal
+            </h1>
+            <p className="text-sm sm:text-lg lg:text-xl text-blue-100 max-w-xs sm:max-w-lg lg:max-w-2xl mx-auto leading-relaxed">
+              Your academic journey starts here. Manage assignments, track progress, and stay connected.
+            </p>
+          </div>
+        </div>
+
+        {/* Dashboard Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+          {dashboardItems.map((item, index) => {
+            const IconComponent = item.icon;
+            return (
+              <Link
+                key={item.title}
+                to={item.href}
+                className="group relative overflow-hidden bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 sm:hover:-translate-y-2 border border-slate-200 active:scale-95"
+              >
+                <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
+                
+                <div className="relative p-4 sm:p-6 lg:p-8">
+                  <div className={`inline-flex p-2 sm:p-3 lg:p-4 rounded-lg sm:rounded-xl bg-gradient-to-br ${item.color} mb-3 sm:mb-4 lg:mb-6 shadow-lg`}>
+                    <IconComponent className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 text-white" />
+                  </div>
+                  
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-800 mb-2 sm:mb-3 group-hover:text-blue-900 transition-colors">
+                    {item.title}
+                  </h3>
+                  
+                  <p className="text-slate-600 text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed line-clamp-2">
+                    {item.description}
+                  </p>
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                      {item.stats}
+                    </span>
+                    <div className="flex items-center text-blue-900 group-hover:text-blue-600 transition-colors">
+                      <span className="text-sm font-medium mr-2">Open</span>
+                      <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Quick Actions */}
+        <div className="mt-8 sm:mt-10 lg:mt-12 bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 border border-slate-200">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-4 sm:mb-6 lg:mb-8 text-center">
+            Quick Actions
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+            <Link
+              to="/student/leave-request"
+              className="group flex flex-col items-center p-4 sm:p-5 lg:p-6 bg-gradient-to-br from-blue-900 to-slate-800 rounded-lg sm:rounded-xl text-white hover:from-blue-800 hover:to-slate-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 active:scale-95"
+            >
+              <PaperAirplaneIcon className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 mb-2 sm:mb-3 lg:mb-4 group-hover:scale-110 transition-transform" />
+              <span className="font-semibold text-sm sm:text-base lg:text-lg">Request Leave</span>
+              <span className="text-blue-100 text-xs sm:text-sm mt-1 sm:mt-2 text-center">Submit application</span>
+            </Link>
+            <Link
+              to="/student/assignments"
+              className="group flex flex-col items-center p-4 sm:p-5 lg:p-6 bg-gradient-to-br from-slate-600 to-slate-700 rounded-lg sm:rounded-xl text-white hover:from-slate-500 hover:to-slate-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 active:scale-95"
+            >
+              <DocumentTextIcon className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 mb-2 sm:mb-3 lg:mb-4 group-hover:scale-110 transition-transform" />
+              <span className="font-semibold text-sm sm:text-base lg:text-lg">View Assignments</span>
+              <span className="text-slate-200 text-xs sm:text-sm mt-1 sm:mt-2 text-center">Check pending tasks</span>
+            </Link>
+            <Link
+              to="/student/announcements"
+              className="group flex flex-col items-center p-4 sm:p-5 lg:p-6 bg-gradient-to-br from-slate-700 to-slate-800 rounded-lg sm:rounded-xl text-white hover:from-slate-600 hover:to-slate-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 active:scale-95"
+            >
+              <SpeakerWaveIcon className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 mb-2 sm:mb-3 lg:mb-4 group-hover:scale-110 transition-transform" />
+              <span className="font-semibold text-sm sm:text-base lg:text-lg">Announcements</span>
+              <span className="text-slate-200 text-xs sm:text-sm mt-1 sm:mt-2 text-center">Latest updates</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Recent Tasks and Announcements */}
+        <div className="mt-8 sm:mt-10 lg:mt-12 grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+          {/* Recent Tasks */}
+          <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 border border-slate-200">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <h3 className="text-lg sm:text-xl font-bold text-slate-800">Recent Tasks</h3>
+              <Link to="/student/assignments" className="text-blue-900 hover:text-blue-600 font-medium text-xs sm:text-sm">
+                View All →
+              </Link>
+            </div>
+            <div className="space-y-3 sm:space-y-4">
+              {mockTasks.map((task) => (
+                <div key={task.id} className="flex items-center justify-between p-3 sm:p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
+                  <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
+                    {getStatusIcon(task.status)}
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-medium text-slate-800 text-sm sm:text-base truncate">{task.title}</h4>
+                      <p className="text-xs sm:text-sm text-slate-500">Due: {new Date(task.dueDate).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                  <span
+                    className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ml-2 whitespace-nowrap ${
+                      task.status === "completed"
+                        ? "bg-green-100 text-green-700"
+                        : task.status === "in-progress"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {getStatusText(task.status)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Recent Announcements */}
+          <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 border border-slate-200">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <h3 className="text-lg sm:text-xl font-bold text-slate-800">Recent Announcements</h3>
+              <Link to="/student/announcements" className="text-blue-900 hover:text-blue-600 font-medium text-xs sm:text-sm">
+                View All →
+              </Link>
+            </div>
+            <div className="space-y-3 sm:space-y-4">
+              {mockAnnouncements.map((announcement) => (
+                <div key={announcement.id} className="flex items-center justify-between p-3 sm:p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
+                  <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
+                    <SpeakerWaveIcon className="h-4 w-4 sm:h-5 sm:w-5 text-blue-900 flex-shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-medium text-slate-800 text-sm sm:text-base truncate">{announcement.title}</h4>
+                      <p className="text-xs sm:text-sm text-slate-500">{new Date(announcement.date).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                  <span
+                    className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ml-2 whitespace-nowrap ${
+                      announcement.type === "academic"
+                        ? "bg-blue-100 text-blue-700"
+                        : announcement.type === "event"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-slate-100 text-slate-700"
+                    }`}
+                  >
+                    {announcement.type}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 lg:hidden z-40">
+          <div className="grid grid-cols-4 gap-1">
+            <Link to="/student/dashboard" className="flex flex-col items-center py-2 px-1 text-blue-900">
+              <BookOpenIcon className="h-5 w-5 mb-1" />
+              <span className="text-xs font-medium">Dashboard</span>
+            </Link>
+            <Link to="/student/assignments" className="flex flex-col items-center py-2 px-1 text-slate-600 hover:text-blue-900">
+              <DocumentTextIcon className="h-5 w-5 mb-1" />
+              <span className="text-xs font-medium">Tasks</span>
+            </Link>
+            <Link to="/student/announcements" className="flex flex-col items-center py-2 px-1 text-slate-600 hover:text-blue-900">
+              <BellIcon className="h-5 w-5 mb-1" />
+              <span className="text-xs font-medium">Alerts</span>
+            </Link>
+            <Link to="/leaderboard" className="flex flex-col items-center py-2 px-1 text-slate-600 hover:text-blue-900">
+              <TrophyIcon className="h-5 w-5 mb-1" />
+              <span className="text-xs font-medium">Rank</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Spacer for mobile navigation */}
+        <div className="h-16 lg:hidden" />
+      </div>
+    </div>
+  );
+}
