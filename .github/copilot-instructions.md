@@ -11,12 +11,7 @@
 
 - [x] Compile the Project - Dependencies installed successfully
 
-- [ ] Create and Run Task
-	<!--
-	Verify that all previous steps have been completed.
-	Check https://code.visualstudio.com/docs/debugtest/tasks to determine if the project needs a task. If so, use the create_and_run_task to create and launch a task based on package.json, README.md, and project structure.
-	Skip this step otherwise.
-	 -->
+- [x] Create and Run Task - Development server started successfully on http://localhost:3000
 
 - [ ] Launch the Project
 	<!--

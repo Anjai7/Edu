@@ -128,45 +128,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen">
-      <nav className="bg-white shadow-lg border-b">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-8">
-              <h1 className="text-2xl font-bold text-blue-600">EduHub</h1>
-              <div className="hidden md:flex space-x-6">
-                <a href="/" className="text-gray-700 hover:text-blue-600 transition-colors">Dashboard</a>
-                <a href="/study" className="text-gray-700 hover:text-blue-600 transition-colors">Study Buddy</a>
-                <a href="/notes" className="text-gray-700 hover:text-blue-600 transition-colors">Notes</a>
-                <a href="/budget" className="text-gray-700 hover:text-blue-600 transition-colors">Budget</a>
-                <a href="/campus" className="text-gray-700 hover:text-blue-600 transition-colors">Campus</a>
-                <a href="/wellness" className="text-gray-700 hover:text-blue-600 transition-colors">Wellness</a>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="text-right hidden sm:block">
-                <div className="text-sm font-medium text-gray-900">{userInfo.name}</div>
-                <div className="text-xs text-gray-500">
-                  {userInfo.type === 'student' ? '🎓 Student' : '👨‍🏫 Staff'} • {userInfo.email}
-                </div>
-              </div>
-              <div className={`h-10 w-10 rounded-full flex items-center justify-center text-white text-sm font-medium ${
-                userInfo.type === 'student' ? 'bg-blue-600' : 'bg-green-600'
-              }`}>
-                {userInfo.name.charAt(0).toUpperCase() || userInfo.email.charAt(0).toUpperCase()}
-              </div>
-              <button 
-                onClick={handleLogout}
-                className="text-gray-700 hover:text-red-600 transition-colors text-sm font-medium"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
-      <main className="container mx-auto px-4 py-8">
-        <Outlet />
-      </main>
     </div>
   );
 }
