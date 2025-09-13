@@ -29,7 +29,23 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export function Layout({ children }: { children: ReactNode }) {
-  const data = useLoaderData<typeof loader>();
+  // Safely access loader data, with fallback for error boundaries
+  let data = {
+    ENV: {
+      SUPABASE_URL: '',
+      SUPABASE_ANON_KEY: '',
+    }
+  };
+
+  try {
+    const loaderData = useLoaderData<typeof loader>();
+    if (loaderData && loaderData.ENV) {
+      data = loaderData;
+    }
+  } catch (error) {
+    // Error boundary or no loader data available - use fallback
+    console.warn('Could not load environment variables:', error);
+  }
   
   return (
     <html lang="en">
@@ -128,6 +144,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen">
+      <Outlet />
     </div>
   );
 }
