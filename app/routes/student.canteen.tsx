@@ -312,7 +312,7 @@ export default function StudentCanteen() {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <Link 
-            to="/student-dashboard"
+            to="/student/dashboard"
             className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
           >
             <ArrowLeftIcon className="h-5 w-5 mr-2" />

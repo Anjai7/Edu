@@ -48,7 +48,7 @@ if (import.meta) {
     //@ts-expect-error
     "app\\routes\\student.homework.tsx"
   );
-  import.meta.hot.lastModified = "1757744515164.715";
+  import.meta.hot.lastModified = "1757747467530.2625";
 }
 var meta = () => {
   return [{
@@ -247,7 +247,7 @@ function StudentHomework() {
   };
   return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "space-y-6", children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "flex items-center justify-between", children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "flex items-center space-x-4", children: [
-      /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, { to: "/student-dashboard", className: "flex items-center text-gray-600 hover:text-gray-900 transition-colors", children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, { to: "/student/dashboard", className: "flex items-center text-gray-600 hover:text-gray-900 transition-colors", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(ArrowLeftIcon_default, { className: "h-5 w-5 mr-2" }, void 0, false, {
           fileName: "app/routes/student.homework.tsx",
           lineNumber: 213,
@@ -854,4 +854,4 @@ export {
   StudentHomework as default,
   meta
 };
-//# sourceMappingURL=/build/routes/student.homework-7UETZWCQ.js.map
+//# sourceMappingURL=/build/routes/student.homework-EXZTDPDG.js.map

@@ -46,7 +46,7 @@ if (import.meta) {
     //@ts-expect-error
     "app\\routes\\student.leaderboard.tsx"
   );
-  import.meta.hot.lastModified = "1757745455868.9128";
+  import.meta.hot.lastModified = "1757747485374.1592";
 }
 var meta = () => {
   return [{
@@ -286,7 +286,7 @@ function StudentLeaderboard() {
   };
   return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "space-y-6", children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "flex items-center justify-between", children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "flex items-center space-x-4", children: [
-      /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, { to: "/student-dashboard", className: "flex items-center text-gray-600 hover:text-gray-900 transition-colors", children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, { to: "/student/dashboard", className: "flex items-center text-gray-600 hover:text-gray-900 transition-colors", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(ArrowLeftIcon_default, { className: "h-5 w-5 mr-2" }, void 0, false, {
           fileName: "app/routes/student.leaderboard.tsx",
           lineNumber: 229,
@@ -829,4 +829,4 @@ export {
   StudentLeaderboard as default,
   meta
 };
-//# sourceMappingURL=/build/routes/student.leaderboard-HBMVJYM7.js.map
+//# sourceMappingURL=/build/routes/student.leaderboard-HHTCRZVA.js.map

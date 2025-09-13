@@ -1,10 +1,15 @@
 import type { MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Dashboard - EduHub" },
-    { name: "description", content: "All-in-One Student Web Application" },
+    { title: "Student Dashboard - EduHub" },
+    { name: "description", content: "Your comprehensive student dashboard for academic success" },
   ];
+};
+
+export const loader = async () => {
+  return redirect("/student/dashboard");
 };
 
 export default function Index() {

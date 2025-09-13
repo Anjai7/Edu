@@ -38,33 +38,7 @@ export function Layout({ children }: { children: ReactNode }) {
 export default function App() {
   return (
     <div className="min-h-screen">
-      <nav className="bg-white shadow-lg border-b">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-8">
-              <h1 className="text-2xl font-bold text-blue-600">EduHub</h1>
-              <div className="hidden md:flex space-x-6">
-                <a href="/" className="text-gray-700 hover:text-blue-600 transition-colors">Dashboard</a>
-                <a href="/leaderboard" className="text-gray-700 hover:text-blue-600 transition-colors">Leaderboard</a>
-                <a href="/assignments" className="text-gray-700 hover:text-blue-600 transition-colors">Assignments</a>
-                <a href="/attendance" className="text-gray-700 hover:text-blue-600 transition-colors">Attendance</a>
-                <a href="/canteen" className="text-gray-700 hover:text-blue-600 transition-colors">Canteen</a>
-                <a href="/announcements" className="text-gray-700 hover:text-blue-600 transition-colors">Announcements</a>
-                <a href="/leaves" className="text-gray-700 hover:text-blue-600 transition-colors">Leave</a>
-                <a href="/notes" className="text-gray-700 hover:text-blue-600 transition-colors">Notes</a>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                U
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
-      <main className="container mx-auto px-4 py-8">
-        <Outlet />
-      </main>
+      <Outlet />
     </div>
   );
 }

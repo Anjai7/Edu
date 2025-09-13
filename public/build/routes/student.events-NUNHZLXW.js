@@ -49,7 +49,7 @@ if (import.meta) {
     //@ts-expect-error
     "app\\routes\\student.events.tsx"
   );
-  import.meta.hot.lastModified = "1757744669523.53";
+  import.meta.hot.lastModified = "1757747479293.463";
 }
 var meta = () => {
   return [{
@@ -222,7 +222,7 @@ function StudentEvents() {
   };
   return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "space-y-6", children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "flex items-center justify-between", children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "flex items-center space-x-4", children: [
-      /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, { to: "/student-dashboard", className: "flex items-center text-gray-600 hover:text-gray-900 transition-colors", children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, { to: "/student/dashboard", className: "flex items-center text-gray-600 hover:text-gray-900 transition-colors", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(ArrowLeftIcon_default, { className: "h-5 w-5 mr-2" }, void 0, false, {
           fileName: "app/routes/student.events.tsx",
           lineNumber: 199,
@@ -952,4 +952,4 @@ export {
   StudentEvents as default,
   meta
 };
-//# sourceMappingURL=/build/routes/student.events-VILLP52B.js.map
+//# sourceMappingURL=/build/routes/student.events-NUNHZLXW.js.map

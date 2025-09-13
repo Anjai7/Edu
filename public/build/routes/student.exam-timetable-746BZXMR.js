@@ -48,7 +48,7 @@ if (import.meta) {
     //@ts-expect-error
     "app\\routes\\student.exam-timetable.tsx"
   );
-  import.meta.hot.lastModified = "1757744599381.2688";
+  import.meta.hot.lastModified = "1757747473524.5947";
 }
 var meta = () => {
   return [{
@@ -198,7 +198,7 @@ function ExamTimetable() {
   return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "space-y-6", children: [
     /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "flex items-center justify-between", children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "flex items-center space-x-4", children: [
-        /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, { to: "/student-dashboard", className: "flex items-center text-gray-600 hover:text-gray-900 transition-colors", children: [
+        /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, { to: "/student/dashboard", className: "flex items-center text-gray-600 hover:text-gray-900 transition-colors", children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(ArrowLeftIcon_default, { className: "h-5 w-5 mr-2" }, void 0, false, {
             fileName: "app/routes/student.exam-timetable.tsx",
             lineNumber: 173,
@@ -866,4 +866,4 @@ export {
   ExamTimetable as default,
   meta
 };
-//# sourceMappingURL=/build/routes/student.exam-timetable-CTQ27T7P.js.map
+//# sourceMappingURL=/build/routes/student.exam-timetable-746BZXMR.js.map
