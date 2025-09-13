@@ -5,42 +5,35 @@ import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import {
   PlusIcon,
-  DocumentTextIcon,
+  CalendarDaysIcon,
   TrashIcon,
   XMarkIcon,
   Bars3Icon,
   HomeIcon,
+  DocumentTextIcon,
   AcademicCapIcon,
   BookOpenIcon,
-  CalendarDaysIcon,
   ChartBarIcon
 } from "@heroicons/react/24/outline";
 import { createSupabaseServerClient } from "~/lib/supabase.server";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Manage Assignments - EduHub Admin" },
-    { name: "description", content: "Create and manage student assignments" },
+    { title: "Event Management - EduHub Admin" },
+    { name: "description", content: "Schedule and manage events" },
   ];
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const supabase = createSupabaseServerClient(request);
 
-  const [
-    { data: assignments },
-    { data: courses },
-    { data: faculty }
-  ] = await Promise.all([
-    supabase.from('assignments').select('*, courses (name), users!assignments_faculty_id_fkey (full_name)').order('created_at', { ascending: false }),
-    supabase.from('courses').select('*').order('name'),
-    supabase.from('users').select('*').eq('role', 'faculty').order('full_name')
-  ]);
+  const { data: events } = await supabase
+    .from('events')
+    .select('*')
+    .order('event_date', { ascending: true });
 
   return json({
-    assignments: assignments || [],
-    courses: courses || [],
-    faculty: faculty || []
+    events: events || []
   });
 }
 
@@ -52,20 +45,18 @@ export async function action({ request }: ActionFunctionArgs) {
   if (intent === 'create') {
     const title = formData.get('title') as string;
     const description = formData.get('description') as string;
-    const course_id = formData.get('course_id') as string;
-    const faculty_id = formData.get('faculty_id') as string;
-    const due_date = formData.get('due_date') as string;
-    const max_points = parseInt(formData.get('max_points') as string);
+    const event_date = formData.get('event_date') as string;
+    const location = formData.get('location') as string;
+    const event_type = formData.get('event_type') as string;
 
-    const { data: assignment, error } = await supabase
-      .from('assignments')
+    const { data: event, error } = await supabase
+      .from('events')
       .insert({
         title,
         description,
-        course_id: parseInt(course_id),
-        faculty_id: parseInt(faculty_id),
-        due_date,
-        max_points,
+        event_date,
+        location,
+        event_type,
         status: 'active'
       })
       .select()
@@ -77,22 +68,22 @@ export async function action({ request }: ActionFunctionArgs) {
 
     // Create announcement for students
     await supabase.from('announcements').insert({
-      title: `New Assignment: ${title}`,
-      content: `A new assignment "${title}" has been created. Due date: ${new Date(due_date).toLocaleDateString()}`,
-      type: 'assignment',
+      title: `New Event: ${title}`,
+      content: `Event "${title}" has been scheduled for ${new Date(event_date).toLocaleDateString()} at ${new Date(event_date).toLocaleTimeString()}. Location: ${location}. ${description}`,
+      type: 'event',
       priority: 'medium',
       target_audience: 'students',
-      created_by: parseInt(faculty_id)
+      created_by: 1 // Admin user
     });
 
-    return json({ success: true, assignment });
+    return json({ success: true, event });
   }
 
   if (intent === 'delete') {
     const id = formData.get('id') as string;
     
     const { error } = await supabase
-      .from('assignments')
+      .from('events')
       .delete()
       .eq('id', parseInt(id));
 
@@ -106,20 +97,30 @@ export async function action({ request }: ActionFunctionArgs) {
   return json({ error: 'Invalid action' }, { status: 400 });
 }
 
-export default function AdminAssignments() {
-  const { assignments, courses, faculty } = useLoaderData<typeof loader>();
+export default function AdminEvents() {
+  const { events } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navigation = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: HomeIcon, current: false },
-    { name: 'Assignments', href: '/admin/assignments', icon: DocumentTextIcon, current: true },
+    { name: 'Assignments', href: '/admin/assignments', icon: DocumentTextIcon, current: false },
     { name: 'Records', href: '/admin/records', icon: AcademicCapIcon, current: false },
     { name: 'Homework', href: '/admin/homework', icon: BookOpenIcon, current: false },
     { name: 'Exams', href: '/admin/exams', icon: DocumentTextIcon, current: false },
-    { name: 'Events', href: '/admin/events', icon: CalendarDaysIcon, current: false },
+    { name: 'Events', href: '/admin/events', icon: CalendarDaysIcon, current: true },
     { name: 'Leaderboard', href: '/admin/leaderboard', icon: ChartBarIcon, current: false },
+  ];
+
+  const eventTypes = [
+    { value: 'academic', label: 'Academic' },
+    { value: 'sports', label: 'Sports' },
+    { value: 'cultural', label: 'Cultural' },
+    { value: 'workshop', label: 'Workshop' },
+    { value: 'seminar', label: 'Seminar' },
+    { value: 'meeting', label: 'Meeting' },
+    { value: 'other', label: 'Other' }
   ];
 
   return (
@@ -218,7 +219,7 @@ export default function AdminAssignments() {
       <div className="flex-1 lg:mr-72">
         <div className="lg:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3 flex items-center justify-between">
           <div>
-            <h1 className="text-lg font-semibold text-gray-900">Assignments</h1>
+            <h1 className="text-lg font-semibold text-gray-900">Events</h1>
           </div>
           <button
             onClick={() => setIsMobileMenuOpen(true)}
@@ -231,15 +232,15 @@ export default function AdminAssignments() {
         <div className="p-6">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 hidden lg:block">Assignments</h1>
-              <p className="text-gray-600 mt-2">Create and manage student assignments</p>
+              <h1 className="text-3xl font-bold text-gray-900 hidden lg:block">Events</h1>
+              <p className="text-gray-600 mt-2">Schedule and manage events</p>
             </div>
             <button
               onClick={() => setShowCreateForm(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center"
+              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center"
             >
               <PlusIcon className="h-5 w-5 mr-2" />
-              New Assignment
+              Create Event
             </button>
           </div>
 
@@ -250,7 +251,7 @@ export default function AdminAssignments() {
           )}
           {actionData?.success && (
             <div className="mb-4 bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg">
-              Assignment saved successfully and announcement posted to students!
+              Event created successfully and announcement posted to students!
             </div>
           )}
 
@@ -258,7 +259,7 @@ export default function AdminAssignments() {
             <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
               <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-semibold">Create New Assignment</h3>
+                  <h3 className="text-lg font-semibold">Create New Event</h3>
                   <button
                     onClick={() => setShowCreateForm(false)}
                     className="text-gray-400 hover:text-gray-600"
@@ -271,12 +272,12 @@ export default function AdminAssignments() {
                   <input type="hidden" name="intent" value="create" />
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Event Title</label>
                     <input
                       type="text"
                       name="title"
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                   </div>
 
@@ -285,69 +286,54 @@ export default function AdminAssignments() {
                     <textarea
                       name="description"
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Course</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Event Type</label>
                     <select
-                      name="course_id"
+                      name="event_type"
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     >
-                      <option value="">Select a course</option>
-                      {courses.map((course) => (
-                        <option key={course.id} value={course.id}>
-                          {course.name}
+                      <option value="">Select event type</option>
+                      {eventTypes.map((type) => (
+                        <option key={type.value} value={type.value}>
+                          {type.label}
                         </option>
                       ))}
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Faculty</label>
-                    <select
-                      name="faculty_id"
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="">Select faculty</option>
-                      {faculty.map((member) => (
-                        <option key={member.id} value={member.id}>
-                          {member.full_name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Date & Time</label>
                     <input
                       type="datetime-local"
-                      name="due_date"
+                      name="event_date"
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Max Points</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
                     <input
-                      type="number"
-                      name="max_points"
-                      min="1"
+                      type="text"
+                      name="location"
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="e.g. Main Auditorium, Sports Ground"
                     />
                   </div>
 
                   <div className="flex space-x-3 pt-4">
                     <button
                       type="submit"
-                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md"
+                      className="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-md"
                     >
-                      Create Assignment
+                      Create Event
                     </button>
                     <button
                       type="button"
@@ -364,39 +350,37 @@ export default function AdminAssignments() {
 
           <div className="bg-white shadow rounded-lg">
             <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-medium text-gray-900">All Assignments</h3>
+              <h3 className="text-lg font-medium text-gray-900">All Events</h3>
             </div>
             <div className="divide-y divide-gray-200">
-              {assignments.length === 0 ? (
+              {events.length === 0 ? (
                 <div className="p-6 text-center text-gray-500">
-                  No assignments created yet. Click "New Assignment" to get started.
+                  No events scheduled yet. Click "Create Event" to get started.
                 </div>
               ) : (
-                assignments.map((assignment) => (
-                  <div key={assignment.id} className="p-6 hover:bg-gray-50">
+                events.map((event) => (
+                  <div key={event.id} className="p-6 hover:bg-gray-50">
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <div className="flex items-center">
-                          <DocumentTextIcon className="h-5 w-5 text-gray-400 mr-3" />
+                          <CalendarDaysIcon className="h-5 w-5 text-gray-400 mr-3" />
                           <div>
-                            <h4 className="text-lg font-medium text-gray-900">{assignment.title}</h4>
-                            <p className="text-sm text-gray-500">
-                              {assignment.courses?.name} • {assignment.users?.full_name}
+                            <h4 className="text-lg font-medium text-gray-900">{event.title}</h4>
+                            <p className="text-sm text-gray-500 capitalize">
+                              {event.event_type} • {event.location}
                             </p>
-                            {assignment.description && (
-                              <p className="text-gray-600 mt-1">{assignment.description}</p>
-                            )}
+                            <p className="text-gray-600 mt-1">{event.description}</p>
                             <div className="flex items-center mt-2 text-sm text-gray-500">
-                              <span>Due: {new Date(assignment.due_date).toLocaleDateString()}</span>
+                              <span>Date: {new Date(event.event_date).toLocaleDateString()}</span>
                               <span className="mx-2">•</span>
-                              <span>{assignment.max_points} points</span>
+                              <span>Time: {new Date(event.event_date).toLocaleTimeString()}</span>
                               <span className="mx-2">•</span>
                               <span className={`px-2 py-1 rounded-full text-xs ${
-                                assignment.status === 'active' 
-                                  ? 'bg-green-100 text-green-800' 
+                                event.status === 'active' 
+                                  ? 'bg-purple-100 text-purple-800' 
                                   : 'bg-gray-100 text-gray-800'
                               }`}>
-                                {assignment.status}
+                                {event.status}
                               </span>
                             </div>
                           </div>
@@ -405,12 +389,12 @@ export default function AdminAssignments() {
                       <div className="flex items-center space-x-2">
                         <Form method="post" className="inline">
                           <input type="hidden" name="intent" value="delete" />
-                          <input type="hidden" name="id" value={assignment.id} />
+                          <input type="hidden" name="id" value={event.id} />
                           <button
                             type="submit"
                             className="text-red-600 hover:text-red-800"
                             onClick={(e) => {
-                              if (!confirm('Are you sure you want to delete this assignment?')) {
+                              if (!confirm('Are you sure you want to delete this event?')) {
                                 e.preventDefault();
                               }
                             }}

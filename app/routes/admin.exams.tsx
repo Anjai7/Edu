@@ -19,8 +19,8 @@ import { createSupabaseServerClient } from "~/lib/supabase.server";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Manage Assignments - EduHub Admin" },
-    { name: "description", content: "Create and manage student assignments" },
+    { title: "Exam Management - EduHub Admin" },
+    { name: "description", content: "Schedule and manage exams" },
   ];
 };
 
@@ -28,17 +28,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const supabase = createSupabaseServerClient(request);
 
   const [
-    { data: assignments },
+    { data: exams },
     { data: courses },
     { data: faculty }
   ] = await Promise.all([
-    supabase.from('assignments').select('*, courses (name), users!assignments_faculty_id_fkey (full_name)').order('created_at', { ascending: false }),
+    supabase.from('assignments').select('*, courses (name), users!assignments_faculty_id_fkey (full_name)').eq('type', 'exam').order('created_at', { ascending: false }),
     supabase.from('courses').select('*').order('name'),
     supabase.from('users').select('*').eq('role', 'faculty').order('full_name')
   ]);
 
   return json({
-    assignments: assignments || [],
+    exams: exams || [],
     courses: courses || [],
     faculty: faculty || []
   });
@@ -54,18 +54,21 @@ export async function action({ request }: ActionFunctionArgs) {
     const description = formData.get('description') as string;
     const course_id = formData.get('course_id') as string;
     const faculty_id = formData.get('faculty_id') as string;
-    const due_date = formData.get('due_date') as string;
+    const exam_date = formData.get('exam_date') as string;
+    const duration = formData.get('duration') as string;
     const max_points = parseInt(formData.get('max_points') as string);
+    const room = formData.get('room') as string;
 
-    const { data: assignment, error } = await supabase
+    const { data: exam, error } = await supabase
       .from('assignments')
       .insert({
         title,
         description,
         course_id: parseInt(course_id),
         faculty_id: parseInt(faculty_id),
-        due_date,
+        due_date: exam_date,
         max_points,
+        type: 'exam',
         status: 'active'
       })
       .select()
@@ -77,15 +80,15 @@ export async function action({ request }: ActionFunctionArgs) {
 
     // Create announcement for students
     await supabase.from('announcements').insert({
-      title: `New Assignment: ${title}`,
-      content: `A new assignment "${title}" has been created. Due date: ${new Date(due_date).toLocaleDateString()}`,
-      type: 'assignment',
-      priority: 'medium',
+      title: `Exam Scheduled: ${title}`,
+      content: `Exam "${title}" has been scheduled for ${new Date(exam_date).toLocaleDateString()} at ${new Date(exam_date).toLocaleTimeString()}. Duration: ${duration} minutes. Room: ${room}. Description: ${description}`,
+      type: 'exam',
+      priority: 'high',
       target_audience: 'students',
       created_by: parseInt(faculty_id)
     });
 
-    return json({ success: true, assignment });
+    return json({ success: true, exam });
   }
 
   if (intent === 'delete') {
@@ -106,18 +109,18 @@ export async function action({ request }: ActionFunctionArgs) {
   return json({ error: 'Invalid action' }, { status: 400 });
 }
 
-export default function AdminAssignments() {
-  const { assignments, courses, faculty } = useLoaderData<typeof loader>();
+export default function AdminExams() {
+  const { exams, courses, faculty } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navigation = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: HomeIcon, current: false },
-    { name: 'Assignments', href: '/admin/assignments', icon: DocumentTextIcon, current: true },
+    { name: 'Assignments', href: '/admin/assignments', icon: DocumentTextIcon, current: false },
     { name: 'Records', href: '/admin/records', icon: AcademicCapIcon, current: false },
     { name: 'Homework', href: '/admin/homework', icon: BookOpenIcon, current: false },
-    { name: 'Exams', href: '/admin/exams', icon: DocumentTextIcon, current: false },
+    { name: 'Exams', href: '/admin/exams', icon: DocumentTextIcon, current: true },
     { name: 'Events', href: '/admin/events', icon: CalendarDaysIcon, current: false },
     { name: 'Leaderboard', href: '/admin/leaderboard', icon: ChartBarIcon, current: false },
   ];
@@ -218,7 +221,7 @@ export default function AdminAssignments() {
       <div className="flex-1 lg:mr-72">
         <div className="lg:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3 flex items-center justify-between">
           <div>
-            <h1 className="text-lg font-semibold text-gray-900">Assignments</h1>
+            <h1 className="text-lg font-semibold text-gray-900">Exams</h1>
           </div>
           <button
             onClick={() => setIsMobileMenuOpen(true)}
@@ -231,15 +234,15 @@ export default function AdminAssignments() {
         <div className="p-6">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 hidden lg:block">Assignments</h1>
-              <p className="text-gray-600 mt-2">Create and manage student assignments</p>
+              <h1 className="text-3xl font-bold text-gray-900 hidden lg:block">Exams</h1>
+              <p className="text-gray-600 mt-2">Schedule and manage exams</p>
             </div>
             <button
               onClick={() => setShowCreateForm(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center"
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center"
             >
               <PlusIcon className="h-5 w-5 mr-2" />
-              New Assignment
+              Schedule Exam
             </button>
           </div>
 
@@ -250,7 +253,7 @@ export default function AdminAssignments() {
           )}
           {actionData?.success && (
             <div className="mb-4 bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg">
-              Assignment saved successfully and announcement posted to students!
+              Exam scheduled successfully and announcement posted to students!
             </div>
           )}
 
@@ -258,7 +261,7 @@ export default function AdminAssignments() {
             <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
               <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-semibold">Create New Assignment</h3>
+                  <h3 className="text-lg font-semibold">Schedule New Exam</h3>
                   <button
                     onClick={() => setShowCreateForm(false)}
                     className="text-gray-400 hover:text-gray-600"
@@ -271,12 +274,12 @@ export default function AdminAssignments() {
                   <input type="hidden" name="intent" value="create" />
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Exam Title</label>
                     <input
                       type="text"
                       name="title"
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
                   </div>
 
@@ -285,7 +288,7 @@ export default function AdminAssignments() {
                     <textarea
                       name="description"
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
                   </div>
 
@@ -294,7 +297,7 @@ export default function AdminAssignments() {
                     <select
                       name="course_id"
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
                     >
                       <option value="">Select a course</option>
                       {courses.map((course) => (
@@ -310,7 +313,7 @@ export default function AdminAssignments() {
                     <select
                       name="faculty_id"
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
                     >
                       <option value="">Select faculty</option>
                       {faculty.map((member) => (
@@ -322,32 +325,57 @@ export default function AdminAssignments() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Exam Date & Time</label>
                     <input
                       type="datetime-local"
-                      name="due_date"
+                      name="exam_date"
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
                   </div>
 
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Duration (minutes)</label>
+                      <input
+                        type="number"
+                        name="duration"
+                        min="30"
+                        max="300"
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Max Points</label>
+                      <input
+                        type="number"
+                        name="max_points"
+                        min="1"
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                      />
+                    </div>
+                  </div>
+
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Max Points</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Room/Location</label>
                     <input
-                      type="number"
-                      name="max_points"
-                      min="1"
+                      type="text"
+                      name="room"
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                      placeholder="e.g. Room 101, Lab A"
                     />
                   </div>
 
                   <div className="flex space-x-3 pt-4">
                     <button
                       type="submit"
-                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md"
+                      className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md"
                     >
-                      Create Assignment
+                      Schedule Exam
                     </button>
                     <button
                       type="button"
@@ -364,39 +392,41 @@ export default function AdminAssignments() {
 
           <div className="bg-white shadow rounded-lg">
             <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-medium text-gray-900">All Assignments</h3>
+              <h3 className="text-lg font-medium text-gray-900">Scheduled Exams</h3>
             </div>
             <div className="divide-y divide-gray-200">
-              {assignments.length === 0 ? (
+              {exams.length === 0 ? (
                 <div className="p-6 text-center text-gray-500">
-                  No assignments created yet. Click "New Assignment" to get started.
+                  No exams scheduled yet. Click "Schedule Exam" to get started.
                 </div>
               ) : (
-                assignments.map((assignment) => (
-                  <div key={assignment.id} className="p-6 hover:bg-gray-50">
+                exams.map((exam) => (
+                  <div key={exam.id} className="p-6 hover:bg-gray-50">
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <div className="flex items-center">
                           <DocumentTextIcon className="h-5 w-5 text-gray-400 mr-3" />
                           <div>
-                            <h4 className="text-lg font-medium text-gray-900">{assignment.title}</h4>
+                            <h4 className="text-lg font-medium text-gray-900">{exam.title}</h4>
                             <p className="text-sm text-gray-500">
-                              {assignment.courses?.name} • {assignment.users?.full_name}
+                              {exam.courses?.name} • {exam.users?.full_name}
                             </p>
-                            {assignment.description && (
-                              <p className="text-gray-600 mt-1">{assignment.description}</p>
+                            {exam.description && (
+                              <p className="text-gray-600 mt-1">{exam.description}</p>
                             )}
                             <div className="flex items-center mt-2 text-sm text-gray-500">
-                              <span>Due: {new Date(assignment.due_date).toLocaleDateString()}</span>
+                              <span>Date: {new Date(exam.due_date).toLocaleDateString()}</span>
                               <span className="mx-2">•</span>
-                              <span>{assignment.max_points} points</span>
+                              <span>Time: {new Date(exam.due_date).toLocaleTimeString()}</span>
+                              <span className="mx-2">•</span>
+                              <span>{exam.max_points} points</span>
                               <span className="mx-2">•</span>
                               <span className={`px-2 py-1 rounded-full text-xs ${
-                                assignment.status === 'active' 
-                                  ? 'bg-green-100 text-green-800' 
+                                exam.status === 'active' 
+                                  ? 'bg-red-100 text-red-800' 
                                   : 'bg-gray-100 text-gray-800'
                               }`}>
-                                {assignment.status}
+                                {exam.status}
                               </span>
                             </div>
                           </div>
@@ -405,12 +435,12 @@ export default function AdminAssignments() {
                       <div className="flex items-center space-x-2">
                         <Form method="post" className="inline">
                           <input type="hidden" name="intent" value="delete" />
-                          <input type="hidden" name="id" value={assignment.id} />
+                          <input type="hidden" name="id" value={exam.id} />
                           <button
                             type="submit"
                             className="text-red-600 hover:text-red-800"
                             onClick={(e) => {
-                              if (!confirm('Are you sure you want to delete this assignment?')) {
+                              if (!confirm('Are you sure you want to delete this exam?')) {
                                 e.preventDefault();
                               }
                             }}
