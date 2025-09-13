@@ -13,7 +13,7 @@ import {
 } from "/build/_shared/chunk-RPU4KNDY.js";
 import {
   Link
-} from "/build/_shared/chunk-PTZFFYVS.js";
+} from "/build/_shared/chunk-FPSUGEKY.js";
 import "/build/_shared/chunk-U4FRFQSK.js";
 import {
   createHotContext
@@ -889,4 +889,4 @@ export {
   StudentAnnouncements as default,
   meta
 };
-//# sourceMappingURL=/build/routes/student.announcements-QCZWA6PY.js.map
+//# sourceMappingURL=/build/routes/student.announcements-YGDX6VP3.js.map

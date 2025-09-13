@@ -9,7 +9,7 @@ import {
 } from "/build/_shared/chunk-RPU4KNDY.js";
 import {
   Link
-} from "/build/_shared/chunk-PTZFFYVS.js";
+} from "/build/_shared/chunk-FPSUGEKY.js";
 import "/build/_shared/chunk-U4FRFQSK.js";
 import {
   createHotContext
@@ -829,4 +829,4 @@ export {
   StudentLeaderboard as default,
   meta
 };
-//# sourceMappingURL=/build/routes/student.leaderboard-HHTCRZVA.js.map
+//# sourceMappingURL=/build/routes/student.leaderboard-CH6M7YKO.js.map

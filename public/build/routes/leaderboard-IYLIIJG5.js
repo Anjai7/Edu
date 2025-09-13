@@ -9,7 +9,7 @@ import {
 } from "/build/_shared/chunk-G7CHZRZX.js";
 import {
   useLoaderData
-} from "/build/_shared/chunk-PTZFFYVS.js";
+} from "/build/_shared/chunk-FPSUGEKY.js";
 import "/build/_shared/chunk-U4FRFQSK.js";
 import {
   createHotContext
@@ -8337,4 +8337,4 @@ export {
   Leaderboard as default,
   meta
 };
-//# sourceMappingURL=/build/routes/leaderboard-VPHQL6XK.js.map
+//# sourceMappingURL=/build/routes/leaderboard-IYLIIJG5.js.map

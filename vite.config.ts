@@ -1,4 +1,4 @@
-import { vite } from "@remix-run/dev";
+import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig } from "vite";
 
 export default defineConfig({
@@ -6,7 +6,7 @@ export default defineConfig({
     postcss: './postcss.config.mjs',
   },
   plugins: [
-    vite({
+    remix({
       future: {
         v3_fetcherPersist: true,
         v3_relativeSplatPath: true,
