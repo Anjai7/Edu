@@ -2,12 +2,12 @@ import {
   require_jsx_dev_runtime
 } from "/build/_shared/chunk-XGOTYLZ5.js";
 import {
+  createHotContext
+} from "/build/_shared/chunk-HSUVWMYI.js";
+import "/build/_shared/chunk-UWV35TSL.js";
+import {
   require_react
 } from "/build/_shared/chunk-7M6SC7J5.js";
-import {
-  createHotContext
-} from "/build/_shared/chunk-V7SAXF47.js";
-import "/build/_shared/chunk-UWV35TSL.js";
 import {
   __toESM
 } from "/build/_shared/chunk-PNG5AS42.js";
@@ -33,7 +33,7 @@ if (import.meta) {
     //@ts-expect-error
     "app\\routes\\canteen.tsx"
   );
-  import.meta.hot.lastModified = "1757742777934.1477";
+  import.meta.hot.lastModified = "1757743443592.1272";
 }
 var meta = () => {
   return [{
@@ -524,4 +524,4 @@ export {
   Canteen as default,
   meta
 };
-//# sourceMappingURL=/build/routes/canteen-XO7W6P52.js.map
+//# sourceMappingURL=/build/routes/canteen-TRJESANQ.js.map

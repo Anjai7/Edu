@@ -5,8 +5,12 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
+  useLoaderData,
 } from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { useEffect, useState } from "react";
 
 // Use Remix's proper way to import CSS
 import tailwindStylesheetUrl from "./tailwind.css?url";
@@ -15,7 +19,18 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesheetUrl },
 ];
 
+export async function loader({ request }: LoaderFunctionArgs) {
+  return json({
+    ENV: {
+      SUPABASE_URL: process.env.SUPABASE_URL || '',
+      SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY || '',
+    }
+  });
+}
+
 export function Layout({ children }: { children: ReactNode }) {
+  const data = useLoaderData<typeof loader>();
+  
   return (
     <html lang="en">
       <head>
@@ -25,6 +40,11 @@ export function Layout({ children }: { children: ReactNode }) {
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <Meta />
         <Links />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.ENV = ${JSON.stringify(data.ENV)};`,
+          }}
+        />
       </head>
       <body className="bg-gray-50 min-h-screen">
         {children}
@@ -36,6 +56,76 @@ export function Layout({ children }: { children: ReactNode }) {
 }
 
 export default function App() {
+  const location = useLocation();
+  const isLoginPage = location.pathname === '/login' || location.pathname === '/auth/callback';
+  const [userInfo, setUserInfo] = useState<{
+    email: string;
+    name: string;
+    type: string;
+    isAuthenticated: boolean;
+  }>({
+    email: '',
+    name: '',
+    type: '',
+    isAuthenticated: false
+  });
+
+  useEffect(() => {
+    // Check authentication status and user info from sessionStorage
+    const isAuthenticated = sessionStorage.getItem('isAuthenticated') === 'true';
+    const userEmail = sessionStorage.getItem('userEmail') || '';
+    const userName = sessionStorage.getItem('userName') || '';
+    const userType = sessionStorage.getItem('userType') || '';
+
+    console.log('Root component - checking auth:', {
+      isAuthenticated,
+      userEmail,
+      userName,
+      userType,
+      isLoginPage,
+      currentPath: location.pathname
+    });
+
+    setUserInfo({
+      email: userEmail,
+      name: userName,
+      type: userType,
+      isAuthenticated
+    });
+
+    // Redirect to login if not authenticated and not on login page
+    if (!isAuthenticated && !isLoginPage) {
+      console.log('Not authenticated, redirecting to login');
+      window.location.href = '/login';
+    }
+  }, [isLoginPage, location.pathname]); // Add location.pathname to deps
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('isAuthenticated');
+    sessionStorage.removeItem('userType');
+    sessionStorage.removeItem('userEmail');
+    sessionStorage.removeItem('userName');
+    window.location.href = '/login';
+  };
+
+  // Show login page without navigation
+  if (isLoginPage) {
+    return <Outlet />;
+  }
+
+  // Show loading state while checking authentication
+  if (!userInfo.isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Loading...</h2>
+          <p className="text-gray-600">Please wait while we verify your authentication.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen">
       <nav className="bg-white shadow-lg border-b">
@@ -45,19 +135,31 @@ export default function App() {
               <h1 className="text-2xl font-bold text-blue-600">EduHub</h1>
               <div className="hidden md:flex space-x-6">
                 <a href="/" className="text-gray-700 hover:text-blue-600 transition-colors">Dashboard</a>
-                <a href="/leaderboard" className="text-gray-700 hover:text-blue-600 transition-colors">Leaderboard</a>
-                <a href="/assignments" className="text-gray-700 hover:text-blue-600 transition-colors">Assignments</a>
-                <a href="/attendance" className="text-gray-700 hover:text-blue-600 transition-colors">Attendance</a>
-                <a href="/canteen" className="text-gray-700 hover:text-blue-600 transition-colors">Canteen</a>
-                <a href="/announcements" className="text-gray-700 hover:text-blue-600 transition-colors">Announcements</a>
-                <a href="/leaves" className="text-gray-700 hover:text-blue-600 transition-colors">Leave</a>
+                <a href="/study" className="text-gray-700 hover:text-blue-600 transition-colors">Study Buddy</a>
                 <a href="/notes" className="text-gray-700 hover:text-blue-600 transition-colors">Notes</a>
+                <a href="/budget" className="text-gray-700 hover:text-blue-600 transition-colors">Budget</a>
+                <a href="/campus" className="text-gray-700 hover:text-blue-600 transition-colors">Campus</a>
+                <a href="/wellness" className="text-gray-700 hover:text-blue-600 transition-colors">Wellness</a>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                U
+              <div className="text-right hidden sm:block">
+                <div className="text-sm font-medium text-gray-900">{userInfo.name}</div>
+                <div className="text-xs text-gray-500">
+                  {userInfo.type === 'student' ? '🎓 Student' : '👨‍🏫 Staff'} • {userInfo.email}
+                </div>
               </div>
+              <div className={`h-10 w-10 rounded-full flex items-center justify-center text-white text-sm font-medium ${
+                userInfo.type === 'student' ? 'bg-blue-600' : 'bg-green-600'
+              }`}>
+                {userInfo.name.charAt(0).toUpperCase() || userInfo.email.charAt(0).toUpperCase()}
+              </div>
+              <button 
+                onClick={handleLogout}
+                className="text-gray-700 hover:text-red-600 transition-colors text-sm font-medium"
+              >
+                Logout
+              </button>
             </div>
           </div>
         </div>

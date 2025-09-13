@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
+import { useEffect, useState } from "react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -8,12 +9,43 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+  const [userInfo, setUserInfo] = useState<{
+    name: string;
+    type: string;
+  }>({
+    name: '',
+    type: ''
+  });
+
+  useEffect(() => {
+    // Get user info from sessionStorage
+    const userName = sessionStorage.getItem('userName') || 'User';
+    const userType = sessionStorage.getItem('userType') || 'student';
+    
+    setUserInfo({
+      name: userName,
+      type: userType
+    });
+  }, []);
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  };
+
   return (
     <div className="max-w-7xl mx-auto space-y-8">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Welcome to EduHub</h1>
-        <p className="text-xl text-gray-600">Your All-in-One Student Web Application</p>
+        <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          {getGreeting()}, {userInfo.name}! 
+          {userInfo.type === 'student' ? ' 🎓' : ' 👨‍🏫'}
+        </h1>
+        <p className="text-xl text-gray-600">
+          Welcome to your {userInfo.type === 'student' ? 'Student' : 'Staff'} Dashboard
+        </p>
       </div>
 
       {/* Quick Stats */}

@@ -1,4 +1,4 @@
-import { vite } from "@remix-run/dev";
+import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig } from "vite";
 
 export default defineConfig({
@@ -6,7 +6,7 @@ export default defineConfig({
     postcss: './postcss.config.mjs',
   },
   plugins: [
-    vite({
+    remix({
       future: {
         v3_fetcherPersist: true,
         v3_relativeSplatPath: true,
@@ -15,6 +15,7 @@ export default defineConfig({
     }),
   ],
   server: {
+    port: 5001,
     fs: {
       // Allow serving files from one level up to the project root
       allow: ['..']
