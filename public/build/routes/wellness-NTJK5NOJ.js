@@ -5,12 +5,12 @@ import {
   require_jsx_dev_runtime
 } from "/build/_shared/chunk-XGOTYLZ5.js";
 import {
+  require_react
+} from "/build/_shared/chunk-7M6SC7J5.js";
+import {
   createHotContext
 } from "/build/_shared/chunk-V7SAXF47.js";
 import "/build/_shared/chunk-UWV35TSL.js";
-import {
-  require_react
-} from "/build/_shared/chunk-7M6SC7J5.js";
 import {
   __toESM
 } from "/build/_shared/chunk-PNG5AS42.js";
@@ -655,4 +655,4 @@ export {
   Wellness as default,
   meta
 };
-//# sourceMappingURL=/build/routes/wellness-BRWXVPST.js.map
+//# sourceMappingURL=/build/routes/wellness-NTJK5NOJ.js.map

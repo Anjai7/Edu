@@ -4,22 +4,22 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration
-} from "/build/_shared/chunk-3THOYHBF.js";
+} from "/build/_shared/chunk-OAIZINPU.js";
 import "/build/_shared/chunk-U4FRFQSK.js";
 import {
   require_jsx_dev_runtime
 } from "/build/_shared/chunk-XGOTYLZ5.js";
+import "/build/_shared/chunk-7M6SC7J5.js";
 import {
   createHotContext
 } from "/build/_shared/chunk-V7SAXF47.js";
 import "/build/_shared/chunk-UWV35TSL.js";
-import "/build/_shared/chunk-7M6SC7J5.js";
 import {
   __toESM
 } from "/build/_shared/chunk-PNG5AS42.js";
 
 // app/tailwind.css?url
-var tailwind_default = "/build/_assets/tailwind-PSAB4YLK.css?url";
+var tailwind_default = "/build/_assets/tailwind-TCNIHEJU.css?url";
 
 // app/root.tsx
 var import_jsx_dev_runtime = __toESM(require_jsx_dev_runtime(), 1);
@@ -119,29 +119,44 @@ function App() {
           columnNumber: 15
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "hidden md:flex space-x-6", children: [
-          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", { href: "/study", className: "text-gray-700 hover:text-blue-600 transition-colors", children: "Study Buddy" }, void 0, false, {
+          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", { href: "/", className: "text-gray-700 hover:text-blue-600 transition-colors", children: "Dashboard" }, void 0, false, {
             fileName: "app/root.tsx",
             lineNumber: 55,
             columnNumber: 17
           }, this),
-          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", { href: "/notes", className: "text-gray-700 hover:text-blue-600 transition-colors", children: "Notes" }, void 0, false, {
+          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", { href: "/leaderboard", className: "text-gray-700 hover:text-blue-600 transition-colors", children: "Leaderboard" }, void 0, false, {
             fileName: "app/root.tsx",
             lineNumber: 56,
             columnNumber: 17
           }, this),
-          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", { href: "/budget", className: "text-gray-700 hover:text-blue-600 transition-colors", children: "Budget" }, void 0, false, {
+          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", { href: "/assignments", className: "text-gray-700 hover:text-blue-600 transition-colors", children: "Assignments" }, void 0, false, {
             fileName: "app/root.tsx",
             lineNumber: 57,
             columnNumber: 17
           }, this),
-          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", { href: "/campus", className: "text-gray-700 hover:text-blue-600 transition-colors", children: "Campus" }, void 0, false, {
+          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", { href: "/attendance", className: "text-gray-700 hover:text-blue-600 transition-colors", children: "Attendance" }, void 0, false, {
             fileName: "app/root.tsx",
             lineNumber: 58,
             columnNumber: 17
           }, this),
-          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", { href: "/wellness", className: "text-gray-700 hover:text-blue-600 transition-colors", children: "Wellness" }, void 0, false, {
+          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", { href: "/canteen", className: "text-gray-700 hover:text-blue-600 transition-colors", children: "Canteen" }, void 0, false, {
             fileName: "app/root.tsx",
             lineNumber: 59,
+            columnNumber: 17
+          }, this),
+          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", { href: "/announcements", className: "text-gray-700 hover:text-blue-600 transition-colors", children: "Announcements" }, void 0, false, {
+            fileName: "app/root.tsx",
+            lineNumber: 60,
+            columnNumber: 17
+          }, this),
+          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", { href: "/leaves", className: "text-gray-700 hover:text-blue-600 transition-colors", children: "Leave" }, void 0, false, {
+            fileName: "app/root.tsx",
+            lineNumber: 61,
+            columnNumber: 17
+          }, this),
+          /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", { href: "/notes", className: "text-gray-700 hover:text-blue-600 transition-colors", children: "Notes" }, void 0, false, {
+            fileName: "app/root.tsx",
+            lineNumber: 62,
             columnNumber: 17
           }, this)
         ] }, void 0, true, {
@@ -154,13 +169,13 @@ function App() {
         lineNumber: 52,
         columnNumber: 13
       }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "flex items-center", children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium", children: "U" }, void 0, false, {
+      /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "flex items-center space-x-4", children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium", children: "U" }, void 0, false, {
         fileName: "app/root.tsx",
-        lineNumber: 63,
+        lineNumber: 66,
         columnNumber: 15
       }, this) }, void 0, false, {
         fileName: "app/root.tsx",
-        lineNumber: 62,
+        lineNumber: 65,
         columnNumber: 13
       }, this)
     ] }, void 0, true, {
@@ -178,11 +193,11 @@ function App() {
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("main", { className: "container mx-auto px-4 py-8", children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Outlet, {}, void 0, false, {
       fileName: "app/root.tsx",
-      lineNumber: 71,
+      lineNumber: 74,
       columnNumber: 9
     }, this) }, void 0, false, {
       fileName: "app/root.tsx",
-      lineNumber: 70,
+      lineNumber: 73,
       columnNumber: 7
     }, this)
   ] }, void 0, true, {
@@ -203,4 +218,4 @@ export {
   App as default,
   links
 };
-//# sourceMappingURL=/build/root-DWWBO4ZC.js.map
+//# sourceMappingURL=/build/root-WWPOAM5S.js.map

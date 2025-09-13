@@ -44,14 +44,17 @@ export default function App() {
             <div className="flex items-center space-x-8">
               <h1 className="text-2xl font-bold text-blue-600">EduHub</h1>
               <div className="hidden md:flex space-x-6">
-                <a href="/study" className="text-gray-700 hover:text-blue-600 transition-colors">Study Buddy</a>
+                <a href="/" className="text-gray-700 hover:text-blue-600 transition-colors">Dashboard</a>
+                <a href="/leaderboard" className="text-gray-700 hover:text-blue-600 transition-colors">Leaderboard</a>
+                <a href="/assignments" className="text-gray-700 hover:text-blue-600 transition-colors">Assignments</a>
+                <a href="/attendance" className="text-gray-700 hover:text-blue-600 transition-colors">Attendance</a>
+                <a href="/canteen" className="text-gray-700 hover:text-blue-600 transition-colors">Canteen</a>
+                <a href="/announcements" className="text-gray-700 hover:text-blue-600 transition-colors">Announcements</a>
+                <a href="/leaves" className="text-gray-700 hover:text-blue-600 transition-colors">Leave</a>
                 <a href="/notes" className="text-gray-700 hover:text-blue-600 transition-colors">Notes</a>
-                <a href="/budget" className="text-gray-700 hover:text-blue-600 transition-colors">Budget</a>
-                <a href="/campus" className="text-gray-700 hover:text-blue-600 transition-colors">Campus</a>
-                <a href="/wellness" className="text-gray-700 hover:text-blue-600 transition-colors">Wellness</a>
               </div>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center space-x-4">
               <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
                 U
               </div>
